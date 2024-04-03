@@ -72,7 +72,7 @@ public class EspecialidadModel implements CRUD
                 Especialidad especiality = new Especialidad();
                 
                 especiality.setName(resultado.getString("nombre"));
-                especiality.setId_especialidad(resultado.getInt("descripcion"));
+                especiality.setDescription(resultado.getString("descripcion"));
                 especiality.setId_especialidad(resultado.getInt("id_especialidad"));
 
                 especialityList.add(especiality);
@@ -146,7 +146,8 @@ public class EspecialidadModel implements CRUD
             preparedStatement.setInt(3, especiality.getId_especialidad());
             preparedStatement.setString(1, especiality.getName());
             preparedStatement.setString(2, especiality.getDescription());
-            
+            preparedStatement.setInt(4, especiality.getId_especialidad());
+
             int resultado = preparedStatement.executeUpdate();
 
             if (resultado > 0)

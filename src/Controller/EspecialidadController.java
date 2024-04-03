@@ -11,55 +11,56 @@ public class EspecialidadController
     //Listar factorizado para cualquier objeto de lista
     public static String listAll(List<Object> objectList)
     {
-        String list = "--- MEDICS LIST --- \n";
+        String list = "--- ESPECIALITIES LIST --- \n";
 
-        for (Object especiality: objectList){
-            Especialidad especialityNew = (Especialidad) especiality;
+        for (Object speciality: objectList){
+            Especialidad especialityNew = (Especialidad) speciality;
             list += especialityNew.toString() + "\n";
         }
 
         return list;
     }
 
-    public static void listEspeciality()
+    public static void listSpeciality()
     {
-        EspecialidadModel especialityModel = new EspecialidadModel();
+        EspecialidadModel specialityModel = new EspecialidadModel();
 
-        JOptionPane.showMessageDialog(null, listAll(especialityModel.list()));
+        JOptionPane.showMessageDialog(null, listAll(specialityModel.list()));
     }
 
-    public static String listAllMedics()
+    public static String listAllSpecialities()
     {
-        EspecialidadModel especialityModel = new EspecialidadModel();
-        String listEspeciality = "MEDICS LIST \n";
+        EspecialidadModel specialityModel = new EspecialidadModel();
+        String listSpeciality = "ESPECIALITIES LIST \n";
 
-        for (Object especiality: especialityModel.list()){
+        for (Object speciality: specialityModel.list()){
 
-            Especialidad especialityNew = (Especialidad) especiality;
-            listEspeciality += especialityNew.toString() + "\n";
+            Especialidad specialityNew = (Especialidad) speciality;
+            listSpeciality += specialityNew.toString() + "\n";
         }
 
-        return listEspeciality;
+        //Devuelve un string
+        return listSpeciality;
     }
 
     public static void delete()
     {
-        EspecialidadModel especialityModel = new EspecialidadModel();
+        EspecialidadModel specialityModel = new EspecialidadModel();
 
-        String medicsList = listAllMedics();
+        String specialitiesList = listAllSpecialities();
 
-        int id = Integer.parseInt(JOptionPane.showInputDialog(medicsList + "Input the Especiality ID to delete"));
+        int id = Integer.parseInt(JOptionPane.showInputDialog(specialitiesList + "Input the Speciality ID to delete"));
 
         //Buscamos primero si existe
-        Especialidad especiality = especialityModel.findById(id);
+        Especialidad speciality = specialityModel.findById(id);
 
-        if (especiality == null)
+        if (speciality == null)
         {
-            JOptionPane.showInputDialog(null,"Unknown Especiality");
+            JOptionPane.showInputDialog(null,"Unknown Speciality");
         }
         else
         {
-            int confirm = JOptionPane.showConfirmDialog(null,"Are you sure to delete? -- > " + especiality.toString());
+            int confirm = JOptionPane.showConfirmDialog(null,"Are you sure to delete? -- > " + speciality.toString());
 
             if (confirm == 1)
             {
@@ -67,57 +68,53 @@ public class EspecialidadController
             }
             else
             {
-                especialityModel.delete(especiality);
-                JOptionPane.showMessageDialog(null, "Deleted sucessfully! --> " + especiality.toString());
+                specialityModel.delete(speciality);
+                JOptionPane.showMessageDialog(null, "Deleted sucessfully! --> " + speciality.toString());
             }
         }
     }
 
     public static void update()
     {
-        EspecialidadModel especialityModel = new EspecialidadModel();
+        EspecialidadModel specialityModel = new EspecialidadModel();
 
-        String medicsList = listAllMedics();
+        String specialitiesList = listAllSpecialities();
 
-        int idUpdated = Integer.parseInt( JOptionPane.showInputDialog(medicsList + "Enter Especiality ID to edit"));
+        int idUpdated = Integer.parseInt( JOptionPane.showInputDialog(specialitiesList + "Enter Speciality ID to edit"));
 
-        Especialidad especiality = especialityModel.findById(idUpdated);
+        Especialidad speciality = specialityModel.findById(idUpdated);
 
-        if (especiality == null)
+        if (speciality == null)
         {
-            JOptionPane.showMessageDialog(null, "Unknown Especiality");
+            JOptionPane.showMessageDialog(null, "Unknown Speciality");
         }
         else
         {
-            String name = JOptionPane.showInputDialog("Input the especiality name or leave default name", especiality.getName());
-            String surname = JOptionPane.showInputDialog("Input the especiality surname or leave default", especiality.getSurname());
-            int fk_id_especialidad = Integer.parseInt(JOptionPane.showInputDialog("Input the speciality ID or leave default", especiality.getFk_id_especialidad()));
+            String name = JOptionPane.showInputDialog("Input the speciality name or leave default name", speciality.getName());
+            String description = JOptionPane.showInputDialog("Input the speciality surname or leave default", speciality.getDescription());
 
-            especiality.setName(name);
-            especiality.setSurname(surname);
-            especiality.setFk_id_especialidad(fk_id_especialidad);
+            speciality.setName(name);
+            speciality.setDescription(description);
 
-            especialityModel.update(especiality);
+            specialityModel.update(speciality);
         }
     }
 
 
     public static void create(){
 
-        EspecialidadModel especialityModel = new EspecialidadModel();
-        Especialidad especiality = new Especialidad();
+        EspecialidadModel specialityModel = new EspecialidadModel();
+        Especialidad speciality = new Especialidad();
 
-        String name = JOptionPane.showInputDialog("Insert especiality name");
-        String surname = JOptionPane.showInputDialog("Insert especiality surname");
-        int fk_id_especialidad = Integer.parseInt(JOptionPane.showInputDialog("Insert Speciality ID"));
+        String name = JOptionPane.showInputDialog("Insert speciality name");
+        String descripcion = JOptionPane.showInputDialog("Insert speciality Description");
 
-        especiality.setName(name);
-        especiality.setSurname(surname);
-        especiality.setFk_id_especialidad(fk_id_especialidad);
+        speciality.setName(name);
+        speciality.setDescription(descripcion);
 
         //Pasamos el objeto a medico
-        especiality = (Especialidad) especialityModel.create(especiality);
+        speciality = (Especialidad) specialityModel.create(speciality);
 
-        JOptionPane.showMessageDialog(null, especiality.toString());
+        JOptionPane.showMessageDialog(null, speciality.toString());
     }
 }
