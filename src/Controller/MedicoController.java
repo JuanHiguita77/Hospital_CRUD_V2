@@ -123,4 +123,20 @@ public class MedicoController
         JOptionPane.showMessageDialog(null, medic.toString());
     }
 
+    public static void findDoctorBySpecialization()
+    {
+        MedicoModel medicoModel = new MedicoModel();
+
+        String specialityName = JOptionPane.showInputDialog("Type the speciality name to search All doctors");
+
+        String listMedicsSpecialities = "LIST DOCTORS WITH " + specialityName + " FINDED \n";
+
+        for (Object medic: medicoModel.findDoctorBySpecialization(specialityName))
+        {
+            Medico newMedic = (Medico) medic;
+            listMedicsSpecialities += newMedic.toString() + "\n";
+        }
+
+        JOptionPane.showMessageDialog(null ,listMedicsSpecialities);
+    }
 }

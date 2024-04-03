@@ -152,7 +152,8 @@ public class CitaModel implements CRUD
             preparedStatement.setInt(2, cite.getId_medic());
             preparedStatement.setDate(3, cite.getCite_date());
             preparedStatement.setTime(4, cite.getCite_hour());
-            preparedStatement.setInt(5, cite.getId_cite());
+            preparedStatement.setString(5, cite.getReason());
+            preparedStatement.setInt(6, cite.getId_cite());
 
             int resultado = preparedStatement.executeUpdate();
 
@@ -226,7 +227,7 @@ public class CitaModel implements CRUD
 
         try
         {
-            String sqlQuery = "SELECT * FROM cita WHERE fecha_cita = ?;";
+            String sqlQuery = "SELECT *, paciente.nombre AS nombre_paciente, medico.nombre AS nombre_medico FROM cita JOIN paciente ON cita.fk_id_paciente = paciente.id_paciente JOIN medico ON cita.fk_id_medico = medico.id_medico WHERE fecha_cita = ?;";
 
             PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
 
@@ -246,6 +247,8 @@ public class CitaModel implements CRUD
                 cite.setCite_date(resultado.getDate("fecha_cita"));
                 cite.setCite_hour(resultado.getTime("hora_cita"));
                 cite.setReason(resultado.getString("motivo"));
+                cite.setPatient(resultado.getString("nombre_paciente"));
+                cite.setMedic(resultado.getString("nombre_medico"));
 
             }
         }

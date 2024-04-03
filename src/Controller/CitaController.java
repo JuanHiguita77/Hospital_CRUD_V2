@@ -61,7 +61,7 @@ public class CitaController
         }
         else
         {
-            int confirm = JOptionPane.showConfirmDialog(null,"Are you sure to delete? -- > " + cite.toString());
+            int confirm = JOptionPane.showConfirmDialog(null,"Are you sure to delete? -- > " + cite.toString2());
 
             if (confirm == 1)
             {
@@ -70,7 +70,7 @@ public class CitaController
             else
             {
                 citaModel.delete(cite);
-                JOptionPane.showMessageDialog(null, "Deleted sucessfully! --> " + cite.toString());
+                JOptionPane.showMessageDialog(null, "Deleted sucessfully! --> " + cite.toString2());
             }
         }
     }
@@ -91,11 +91,11 @@ public class CitaController
         }
         else
         {
-            int fk_id_patient = Integer.parseInt( JOptionPane.showInputDialog("Input the cite name or leave default name", cite.getId_patient()));
-            int fk_id_medic  = Integer.parseInt( JOptionPane.showInputDialog("Input the cite surname or leave default", cite.getId_medic()));
-            Date date_cite = Date.valueOf( JOptionPane.showInputDialog("Input the speciality ID or leave default", cite.getCite_date ()));
-            Time hour_cite = Time.valueOf( JOptionPane.showInputDialog("Input the speciality ID or leave default", cite.getCite_hour()));
-            String reason = JOptionPane.showInputDialog("Input the speciality ID or leave default", cite.getReason());
+            int fk_id_patient = Integer.parseInt( JOptionPane.showInputDialog("Input the ID Patient or leave default", cite.getId_patient()));
+            int fk_id_medic  = Integer.parseInt( JOptionPane.showInputDialog("Input the ID Medic or leave default", cite.getId_medic()));
+            Date date_cite = Date.valueOf( JOptionPane.showInputDialog("Input the Dace´s cite ID or leave default", cite.getCite_date ()));
+            Time hour_cite = Time.valueOf( JOptionPane.showInputDialog("Input the Hour´s cite ID or leave default", cite.getCite_hour()));
+            String reason = JOptionPane.showInputDialog("Input the Reason´s cite or leave default", cite.getReason());
 
             cite.setId_patient(fk_id_patient);
             cite.setId_medic(fk_id_medic);
@@ -151,6 +151,8 @@ public class CitaController
             cite.setCite_date(citeRecived.getCite_date());
             cite.setCite_hour(citeRecived.getCite_hour());
             cite.setReason(citeRecived.getReason());
+            cite.setPatient(citeRecived.getPatient());
+            cite.setMedic(citeRecived.getMedic());
 
             JOptionPane.showMessageDialog(null, cite.toString());
         }

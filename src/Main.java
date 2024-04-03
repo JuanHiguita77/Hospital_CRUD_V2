@@ -79,10 +79,11 @@ public class Main {
                         {
                             medicOptionMenu = JOptionPane.showInputDialog("""
                                     1 - List All Medics
-                                    2 - Add New Medic
-                                    3 - Update Medic
-                                    4 - Delete Medic
-                                    5 - Exit Medic Menu
+                                    2 - Search Medics By Specialities
+                                    3 - Add New Medic
+                                    4 - Update Medic
+                                    5 - Delete Medic
+                                    6 - Exit Medic Menu
                                     """);
 
                             switch (medicOptionMenu)
@@ -92,18 +93,22 @@ public class Main {
                                     break;
 
                                 case "2":
-                                    MedicoController.create();
+                                    MedicoController.findDoctorBySpecialization();
                                     break;
 
                                 case "3":
-                                    MedicoController.update();
+                                    MedicoController.create();
                                     break;
 
                                 case "4":
-                                    MedicoController.delete();
+                                    MedicoController.update();
                                     break;
 
                                 case "5":
+                                    MedicoController.delete();
+                                    break;
+
+                                case "6":
                                     exit = true;
                                     break;
                             }
@@ -149,10 +154,11 @@ public class Main {
                     {
                         citeOptionMenu = JOptionPane.showInputDialog("""
                                     1 - List All Cites
-                                    2 - Add New Cite
-                                    3 - Update Cite
-                                    4 - Delete Cite
-                                    5 - Exit Cites Menu
+                                    2 - Search By Cite Date
+                                    3 - Add New Cite
+                                    4 - Update Cite
+                                    5 - Delete Cite
+                                    6 - Exit Cites Menu
                                     """);
 
                         switch (citeOptionMenu)
@@ -162,18 +168,22 @@ public class Main {
                                 break;
 
                             case "2":
-                                CitaController.create();
+                                CitaController.findByDate();
                                 break;
 
                             case "3":
-                                CitaController.update();
+                                CitaController.create();
                                 break;
 
                             case "4":
-                                CitaController.delete();
+                                CitaController.update();
                                 break;
 
                             case "5":
+                                CitaController.delete();
+                                break;
+
+                            case "6":
                                 exit = true;
                                 break;
                         }

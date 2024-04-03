@@ -1,14 +1,12 @@
 package Model;
 
+import Entity.Cita;
 import Entity.Medico;
 import database.CRUD;
 import database.ConfigDB;
 
 import javax.swing.JOptionPane;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -209,5 +207,50 @@ public class MedicoModel implements CRUD
         ConfigDB.closeConnection();
 
         return medic;
+    }
+
+    public List<Object> findDoctorBySpecialization(String speciality)
+    {
+        Connection conexion = ConfigDB.openConnection();
+
+        List<Object> listSpecilitiesDoctors = new ArrayList<>();
+
+        //Global
+        Medico medic = null;
+
+        try
+        {
+                String sqlQuery = "SELECT *, especialidad.nombre AS especialidad FROM medico JOIN especialidad ON medico.fk_id_especialidad = especialidad.id_especialidad WHERE especialidad.nombre LIKE ?;";
+
+                PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
+
+                //Le pasamos el ID al query
+                preparedStatement.setString(1, "%" + speciality + "%");
+
+                ResultSet resultado = preparedStatement.executeQuery();
+
+                //Asignamos los datos encontrados
+                if(resultado.next())
+                {
+                    medic = new Medico();
+
+                    medic.setId_medico(resultado.getInt("id_medico"));
+                    medic.setName(resultado.getString("nombre"));
+                    medic.setSurname(resultado.getString("apellidos"));
+                    medic.setSpeciality(resultado.getString("especialidad"));
+                    medic.setFk_id_especialidad(resultado.getInt("fk_id_especialidad"));
+
+                    listSpecilitiesDoctors.add(medic);
+                }
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Doctor specialities search model error" + e.getMessage());
+        }
+
+        ConfigDB.closeConnection();
+
+        return listSpecilitiesDoctors;
+
     }
 }

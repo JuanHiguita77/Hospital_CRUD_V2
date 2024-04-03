@@ -104,12 +104,22 @@ public class Cita
     @Override
     public String toString() {
         return "Cita --> " +
-                "id_cite=" + id_cite +
-                " id_patient=" + id_patient +
-                " id_medic=" + id_medic +
-                " cite_date=" + cite_date +
-                " cite_hour=" + cite_hour +
-                " reason='" + reason;
+                "id_cite: " + id_cite +
+                " id_patient: " + id_patient +
+                " id_medic: " + id_medic +
+                " cite_date: " + cite_date +
+                " cite_hour: " + cite_hour +
+                " reason: " + reason +
+                " Patient Name: " + patient +
+                " Medic Name: " + medic;
+    }
+
+    public String toString2() {
+        return "Cita --> " +
+                "id_cite: " + id_cite +
+                " cite_date: " + cite_date +
+                " cite_hour: " + cite_hour +
+                " reason: " + reason;
     }
 }
 
