@@ -58,7 +58,7 @@ public class MedicoModel implements CRUD
 
         try
         {
-            String sqlQuery = "SELECT * FROM medico;";
+            String sqlQuery = "SELECT *, especialidad.nombre AS especNombre FROM medico JOIN especialidad ON medico.fk_id_especialidad = especialidad.id_especialidad;";
 
             PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
 
@@ -72,6 +72,7 @@ public class MedicoModel implements CRUD
                 medic.setId_medico(resultado.getInt("id_medico"));
                 medic.setName(resultado.getString("nombre"));
                 medic.setSurname(resultado.getString("apellidos"));
+                medic.setSpeciality(resultado.getString("especNombre"));
                 medic.setFk_id_especialidad(resultado.getInt("fk_id_especialidad"));
 
                 medicList.add(medic);

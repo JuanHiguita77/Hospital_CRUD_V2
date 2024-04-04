@@ -1,7 +1,9 @@
 package Controller;
 
 
+import Entity.Especialidad;
 import Entity.Medico;
+import Model.EspecialidadModel;
 import Model.MedicoModel;
 
 import javax.swing.JOptionPane;
@@ -107,14 +109,19 @@ public class MedicoController
     public static void create(){
 
         MedicoModel medicModel = new MedicoModel();
+        EspecialidadModel especialityModel = new EspecialidadModel();
+
         Medico medic = new Medico();
 
         String name = JOptionPane.showInputDialog("Insert medic name");
         String surname = JOptionPane.showInputDialog("Insert medic surname");
-        int fk_id_especialidad = Integer.parseInt(JOptionPane.showInputDialog("Insert Speciality ID"));
+        int fk_id_especialidad = Integer.parseInt(JOptionPane.showInputDialog(especialityModel.list() + "Insert Speciality ID"));
+
+        Especialidad especialidad = especialityModel.findById(fk_id_especialidad);
 
         medic.setName(name);
         medic.setSurname(surname);
+        medic.setSpeciality(especialidad.getName());
         medic.setFk_id_especialidad(fk_id_especialidad);
 
         //Pasamos el objeto a medico

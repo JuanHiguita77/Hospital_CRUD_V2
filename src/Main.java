@@ -37,7 +37,7 @@ public class Main {
                         {
                             patientOptionMenu = JOptionPane.showInputDialog("""
                                 1 - List All Patients
-                                2 - Add New Author
+                                2 - Add New Patient
                                 3 - Search Patient By Document
                                 4 - Update Patient
                                 5 - Delete Patient
