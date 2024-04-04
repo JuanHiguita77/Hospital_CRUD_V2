@@ -36,7 +36,7 @@ public class CitaModel implements CRUD
 
             //Le damos el id correspondiente a cada nueva entidad
             while (respuesta.next()){
-                cite.setId_patient(respuesta.getInt(1));
+                cite.setId_cite(respuesta.getInt(1));
             }
 
             JOptionPane.showMessageDialog(null, "New Cite Added.");
