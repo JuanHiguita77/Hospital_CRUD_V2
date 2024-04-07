@@ -111,11 +111,6 @@ public class MedicoModel implements CRUD
             {
                 isDeleted = true;
             }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Dont deleted x.x");
-            }
-
         }
         catch (SQLException e)
         {
@@ -143,11 +138,10 @@ public class MedicoModel implements CRUD
             PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery, PreparedStatement.RETURN_GENERATED_KEYS);
 
             //Se le pasa posicion y dato al statement
-            preparedStatement.setInt(5, medic.getId_medico());
             preparedStatement.setString(1, medic.getName());
             preparedStatement.setString(2, medic.getSurname());
-            preparedStatement.setInt(2, medic.getFk_id_especialidad());
-
+            preparedStatement.setInt(3, medic.getFk_id_especialidad());
+            preparedStatement.setInt(4, medic.getId_medico());
 
             int resultado = preparedStatement.executeUpdate();
 
