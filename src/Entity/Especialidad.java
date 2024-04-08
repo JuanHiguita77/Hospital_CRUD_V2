@@ -9,8 +9,7 @@ public class Especialidad
     public Especialidad() {
     }
 
-    public Especialidad(int id_especialidad, String name, String description) {
-        this.id_especialidad = id_especialidad;
+    public Especialidad(String name, String description) {
         this.name = name;
         this.description = description;
     }

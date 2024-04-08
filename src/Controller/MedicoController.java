@@ -5,6 +5,7 @@ import Entity.Especialidad;
 import Entity.Medico;
 import Model.EspecialidadModel;
 import Model.MedicoModel;
+import utils.Utils;
 
 import javax.swing.JOptionPane;
 import java.sql.Date;
@@ -12,6 +13,11 @@ import java.util.List;
 
 public class MedicoController
 {
+    public static MedicoModel instanceMedicModel()
+    {
+        return new MedicoModel();
+    }
+
     //Listar factorizado para cualquier objeto de lista
     public static String listAll(List<Object> objectList)
     {
@@ -27,107 +33,77 @@ public class MedicoController
 
     public static void listMedics()
     {
-        MedicoModel medicModel = new MedicoModel();
-
-        JOptionPane.showMessageDialog(null, listAll(medicModel.list()));
-    }
-
-    public static String listAllMedics()
-    {
-        MedicoModel medicModel = new MedicoModel();
-        String listMedics = "MEDICS LIST \n";
-
-        for (Object medic: medicModel.list()){
-
-            Medico medicNew = (Medico) medic;
-            listMedics += medicNew.toString() + "\n";
-        }
-
-        return listMedics;
+        JOptionPane.showMessageDialog(null, listAll(instanceMedicModel().list()));
     }
 
     public static void delete()
     {
-        MedicoModel medicModel = new MedicoModel();
+        Object[] medicSelected = Utils.listToarray(MedicoController.instanceMedicModel().list());
 
-        String medicsList = listAllMedics();
+        Medico optionSelected = (Medico) JOptionPane.showInputDialog(null,
+                "Select a Medic to delete",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                medicSelected,
+                medicSelected[0]);
 
-        int id = Integer.parseInt(JOptionPane.showInputDialog(medicsList + "Input the Medic ID to delete"));
-
-        //Buscamos primero si existe
-        Medico medic = medicModel.findById(id);
-
-        if (medic == null)
-        {
-            JOptionPane.showInputDialog(null,"Unknown Medic");
-        }
-        else
-        {
-            int confirm = JOptionPane.showConfirmDialog(null,"Are you sure to delete? -- > " + medic.toString());
-
-            if (confirm == 1)
-            {
-                JOptionPane.showMessageDialog(null,"Stopped!");
-            }
-            else
-            {
-                medicModel.delete(medic);
-                JOptionPane.showMessageDialog(null, "Deleted sucessfully! --> " + medic.toString());
-            }
-        }
+        instanceMedicModel().delete(optionSelected);
     }
 
     public static void update()
     {
-        MedicoModel medicModel = new MedicoModel();
+        //Listas pasadas a array para el JOptionPane
+        Object[] medics = Utils.listToarray(MedicoController.instanceMedicModel().list());
+        Object[] specialities = Utils.listToarray(EspecialidadController.instanceSpecialityModel().list());
 
-        String medicsList = listAllMedics();
+        Medico optionSelected = (Medico) JOptionPane.showInputDialog(null,
+                "Select a Medic to Modify",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                medics,
+                medics[0]);
 
-        int idUpdated = Integer.parseInt( JOptionPane.showInputDialog(medicsList + "Enter Medic ID to edit"));
+        String name = JOptionPane.showInputDialog(null,"Input the medic name or leave default name", optionSelected.getName());
+        String surname = JOptionPane.showInputDialog(null, "Input the medic surname or leave default", optionSelected.getSurname());
 
-        Medico medic = medicModel.findById(idUpdated);
+        Especialidad optionSelectedSpeciality = (Especialidad) JOptionPane.showInputDialog(null,
+                "Select a Specility to Change",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                specialities,
+                specialities[0]);
 
-        if (medic == null)
-        {
-            JOptionPane.showMessageDialog(null, "Unknown Medic");
-        }
-        else
-        {
-            String name = JOptionPane.showInputDialog("Input the medic name or leave default name", medic.getName());
-            String surname = JOptionPane.showInputDialog("Input the medic surname or leave default", medic.getSurname());
-            int fk_id_especialidad = Integer.parseInt(JOptionPane.showInputDialog("Input the speciality ID or leave default", medic.getFk_id_especialidad()));
+        optionSelected.setName(name);
+        optionSelected.setSurname(surname);
+        optionSelected.setFk_id_especialidad(optionSelected.getFk_id_especialidad());
+        optionSelected.setSpeciality(optionSelectedSpeciality);
 
-            medic.setName(name);
-            medic.setSurname(surname);
-            medic.setFk_id_especialidad(fk_id_especialidad);
+        instanceMedicModel().update(optionSelected);
 
-            medicModel.update(medic);
-        }
     }
 
 
-    public static void create(){
-
-        MedicoModel medicModel = new MedicoModel();
-        EspecialidadModel especialityModel = new EspecialidadModel();
-
-        Medico medic = new Medico();
+    public static void create()
+    {
 
         String name = JOptionPane.showInputDialog("Insert medic name");
         String surname = JOptionPane.showInputDialog("Insert medic surname");
-        int fk_id_especialidad = Integer.parseInt(JOptionPane.showInputDialog(especialityModel.list() + "Insert Speciality ID"));
 
-        Especialidad especialidad = especialityModel.findById(fk_id_especialidad);
+        Object[] specialitySelected = Utils.listToarray(EspecialidadController.instanceSpecialityModel().list());
 
-        medic.setName(name);
-        medic.setSurname(surname);
-        medic.setSpeciality(especialidad.getName());
-        medic.setFk_id_especialidad(fk_id_especialidad);
+        Especialidad optionSelected = (Especialidad) JOptionPane.showInputDialog(null,
+                "Select a Speciality´s " + name,
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                specialitySelected,
+                specialitySelected[0]);
 
         //Pasamos el objeto a medico
-        medic = (Medico) medicModel.create(medic);
-
-        JOptionPane.showMessageDialog(null, medic.toString());
+        instanceMedicModel().create(new Medico(name, surname, optionSelected.getId_especialidad(), optionSelected));
     }
 
     public static void findDoctorBySpecialization()

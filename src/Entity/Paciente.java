@@ -13,8 +13,7 @@ public class Paciente
     public Paciente() {
     }
 
-    public Paciente(int id_paciente, String name, String surname, Date date_birth, String document) {
-        this.id_paciente = id_paciente;
+    public Paciente(String name, String surname, Date date_birth, String document) {
         this.name = name;
         this.surname = surname;
         this.date_birth = date_birth;

@@ -6,12 +6,11 @@ public class Medico
     private String name;
     private String surname;
     private int fk_id_especialidad;
-    private String speciality;
+    private Especialidad speciality;
     public Medico() {
     }
 
-    public Medico(int id_medico, String name, String surname, int fk_id_especialidad, String speciality) {
-        this.id_medico = id_medico;
+    public Medico(String name, String surname, int fk_id_especialidad, Especialidad speciality) {
         this.name = name;
         this.surname = surname;
         this.fk_id_especialidad = fk_id_especialidad;
@@ -50,21 +49,19 @@ public class Medico
         this.fk_id_especialidad = fk_id_especialidad;
     }
 
-    public String getSpeciality() {
+    public Especialidad getSpeciality() {
         return speciality;
     }
 
-    public void setSpeciality(String speciality) {
+    public void setSpeciality(Especialidad speciality) {
         this.speciality = speciality;
     }
 
     @Override
     public String toString() {
         return "Medico --> " +
-                "id_medico: " + id_medico +
-                " fk_id_especialidad: " + fk_id_especialidad +
                 " name: " + name +
-                " surname: " + surname  +
-                " Speciality : " + speciality;
+                " surname: " + surname +
+                " --- Speciality Name: " + speciality.getName();
     }
 }

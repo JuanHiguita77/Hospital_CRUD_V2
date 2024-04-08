@@ -11,23 +11,13 @@ public class Cita
     private Date cite_date;
     private Time cite_hour;
     private String reason;
-    private String patient;
-    private String medic;
+    private Paciente patient;
+    private Medico medic;
 
     public Cita() {
     }
 
-    /*public Cita(int id_cite, int id_patient, int id_medic, Date cite_date, Time cite_hour, String reason) {
-        this.id_cite = id_cite;
-        this.id_patient = id_patient;
-        this.id_medic = id_medic;
-        this.cite_date = cite_date;
-        this.cite_hour = cite_hour;
-        this.reason = reason;
-    }*/
-
-    public Cita(int id_cite, int id_patient, int id_medic, Date cite_date, Time cite_hour, String reason, String patient, String medic) {
-        this.id_cite = id_cite;
+    public Cita(int id_patient, int id_medic, Date cite_date, Time cite_hour, String reason, Paciente patient, Medico medic) {
         this.id_patient = id_patient;
         this.id_medic = id_medic;
         this.cite_date = cite_date;
@@ -85,19 +75,19 @@ public class Cita
         this.reason = reason;
     }
 
-    public String getPatient() {
+    public Paciente getPatient() {
         return patient;
     }
 
-    public void setPatient(String patient) {
+    public void setPatient(Paciente patient) {
         this.patient = patient;
     }
 
-    public String getMedic() {
+    public Medico getMedic() {
         return medic;
     }
 
-    public void setMedic(String medic) {
+    public void setMedic(Medico medic) {
         this.medic = medic;
     }
 
@@ -110,16 +100,8 @@ public class Cita
                 " cite_date: " + cite_date +
                 " cite_hour: " + cite_hour +
                 " reason: " + reason +
-                " Patient Name: " + patient +
-                " Medic Name: " + medic;
-    }
-
-    public String toString2() {
-        return "Cita --> " +
-                "id_cite: " + id_cite +
-                " cite_date: " + cite_date +
-                " cite_hour: " + cite_hour +
-                " reason: " + reason;
+                "  ---  Patient Name --> " + patient.getName() +
+                "  ---  Medic Name --> " + medic.getName();
     }
 }
 

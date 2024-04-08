@@ -1,6 +1,7 @@
 package Model;
 
 import Entity.Cita;
+import Entity.Especialidad;
 import Entity.Medico;
 import database.CRUD;
 import database.ConfigDB;
@@ -13,7 +14,8 @@ import java.util.List;
 public class MedicoModel implements CRUD
 {
     @Override
-    public Object create(Object object) {
+    public Object create(Object object)
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -50,7 +52,8 @@ public class MedicoModel implements CRUD
     }
 
     @Override
-    public List<Object> list() {
+    public List<Object> list()
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -58,7 +61,7 @@ public class MedicoModel implements CRUD
 
         try
         {
-            String sqlQuery = "SELECT *, especialidad.nombre AS especNombre FROM medico JOIN especialidad ON medico.fk_id_especialidad = especialidad.id_especialidad;";
+            String sqlQuery = "SELECT * FROM medico JOIN especialidad ON especialidad.id_especialidad = medico.fk_id_especialidad;";
 
             PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
 
@@ -68,13 +71,18 @@ public class MedicoModel implements CRUD
             {
 
                 Medico medic = new Medico();
+                Especialidad speciality = new Especialidad();
 
-                medic.setId_medico(resultado.getInt("id_medico"));
-                medic.setName(resultado.getString("nombre"));
-                medic.setSurname(resultado.getString("apellidos"));
-                medic.setSpeciality(resultado.getString("especNombre"));
-                medic.setFk_id_especialidad(resultado.getInt("fk_id_especialidad"));
+                medic.setId_medico(resultado.getInt("medico.id_medico"));
+                medic.setName(resultado.getString("medico.nombre"));
+                medic.setSurname(resultado.getString("medico.apellidos"));
+                medic.setFk_id_especialidad(resultado.getInt("medico.fk_id_especialidad"));
 
+                speciality.setId_especialidad(resultado.getInt("especialidad.id_especialidad"));
+                speciality.setName(resultado.getString("especialidad.nombre"));
+                speciality.setDescription(resultado.getString("especialidad.descripcion"));
+
+                medic.setSpeciality(speciality);
                 medicList.add(medic);
             }
         }
@@ -105,17 +113,12 @@ public class MedicoModel implements CRUD
 
             preparedStatement.setInt(1, medic.getId_medico());
 
-            int resultadoFilasAfectadas = preparedStatement.executeUpdate();
-
-            if (resultadoFilasAfectadas > 0)
+            if (preparedStatement.executeUpdate() > 0)
             {
                 isDeleted = true;
             }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Dont deleted x.x");
-            }
 
+            JOptionPane.showMessageDialog(null, "Succesfull Delete");
         }
         catch (SQLException e)
         {
@@ -128,7 +131,8 @@ public class MedicoModel implements CRUD
     }
 
     @Override
-    public boolean update(Object object) {
+    public boolean update(Object object)
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -140,14 +144,14 @@ public class MedicoModel implements CRUD
 
             String sqlQuery = "UPDATE medico SET nombre = ?, apellidos = ?, fk_id_especialidad = ? WHERE id_medico = ?;";
 
-            PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
 
+            System.out.println("Id medico actual: " + medic.getId_medico());
             //Se le pasa posicion y dato al statement
-            preparedStatement.setInt(5, medic.getId_medico());
             preparedStatement.setString(1, medic.getName());
             preparedStatement.setString(2, medic.getSurname());
-            preparedStatement.setInt(2, medic.getFk_id_especialidad());
-
+            preparedStatement.setInt(3, medic.getFk_id_especialidad());
+            preparedStatement.setInt(4, medic.getId_medico());
 
             int resultado = preparedStatement.executeUpdate();
 
@@ -156,7 +160,10 @@ public class MedicoModel implements CRUD
                 isUpdated = true;
                 JOptionPane.showMessageDialog(null, "Updated Successfully");
             }
-
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Dont Updated X.x");
+            }
         }
         catch (Exception e)
         {
@@ -238,7 +245,7 @@ public class MedicoModel implements CRUD
                     medic.setId_medico(resultado.getInt("id_medico"));
                     medic.setName(resultado.getString("nombre"));
                     medic.setSurname(resultado.getString("apellidos"));
-                    medic.setSpeciality(resultado.getString("especialidad"));
+                   // medic.setSpeciality(resultado.getString("especialidad"));
                     medic.setFk_id_especialidad(resultado.getInt("fk_id_especialidad"));
 
                     listSpecilitiesDoctors.add(medic);

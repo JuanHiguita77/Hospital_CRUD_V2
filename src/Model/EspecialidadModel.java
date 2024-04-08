@@ -15,7 +15,8 @@ import java.util.List;
 public class EspecialidadModel implements CRUD
 {
     @Override
-    public Object create(Object object) {
+    public Object create(Object object)
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -52,7 +53,8 @@ public class EspecialidadModel implements CRUD
     }
 
     @Override
-    public List<Object> list() {
+    public List<Object> list()
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -128,7 +130,8 @@ public class EspecialidadModel implements CRUD
     }
 
     @Override
-    public boolean update(Object object) {
+    public boolean update(Object object)
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -138,15 +141,14 @@ public class EspecialidadModel implements CRUD
         {
             Especialidad especiality = (Especialidad) object;
 
-            String sqlQuery = "UPDATE especialidad SET nombre = ?, descripcion = ?, id_especialidad = ? WHERE id_especialidad = ?;";
+            String sqlQuery = "UPDATE especialidad SET nombre = ?, descripcion = ? WHERE id_especialidad = ?;";
 
-            PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
 
             //Se le pasa posicion y dato al statement
-            preparedStatement.setInt(3, especiality.getId_especialidad());
             preparedStatement.setString(1, especiality.getName());
             preparedStatement.setString(2, especiality.getDescription());
-            preparedStatement.setInt(4, especiality.getId_especialidad());
+            preparedStatement.setInt(3, especiality.getId_especialidad());
 
             int resultado = preparedStatement.executeUpdate();
 

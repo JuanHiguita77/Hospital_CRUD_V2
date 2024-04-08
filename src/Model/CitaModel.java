@@ -1,10 +1,12 @@
 package Model;
 
 import Entity.Cita;
+import Entity.Medico;
+import Entity.Paciente;
 import database.CRUD;
 import database.ConfigDB;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,8 @@ import java.util.List;
 public class CitaModel implements CRUD
 {
     @Override
-    public Object create(Object object) {
+    public Object create(Object object)
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -36,7 +39,7 @@ public class CitaModel implements CRUD
 
             //Le damos el id correspondiente a cada nueva entidad
             while (respuesta.next()){
-                cite.setId_patient(respuesta.getInt(1));
+                cite.setId_cite(respuesta.getInt(1));
             }
 
             JOptionPane.showMessageDialog(null, "New Cite Added.");
@@ -51,7 +54,8 @@ public class CitaModel implements CRUD
     }
 
     @Override
-    public List<Object> list() {
+    public List<Object> list()
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -69,15 +73,21 @@ public class CitaModel implements CRUD
             {
 
                 Cita cite = new Cita();
+                Paciente patient = new Paciente();
+                Medico medic = new Medico();
 
-                cite.setId_cite(resultado.getInt("id_cita"));
-                cite.setId_patient(resultado.getInt("fk_id_paciente"));
-                cite.setId_medic(resultado.getInt("fk_id_medico"));
-                cite.setCite_date(resultado.getDate("fecha_cita"));
-                cite.setCite_hour(resultado.getTime("hora_cita"));
-                cite.setReason(resultado.getString("motivo"));
-                cite.setPatient(resultado.getString("nombre_paciente"));
-                cite.setMedic(resultado.getString("nombre_medico"));
+                cite.setId_cite(resultado.getInt("cita.id_cita"));
+                cite.setId_patient(resultado.getInt("cita.fk_id_paciente"));
+                cite.setId_medic(resultado.getInt("cita.fk_id_medico"));
+                cite.setCite_date(resultado.getDate("cita.fecha_cita"));
+                cite.setCite_hour(resultado.getTime("cita.hora_cita"));
+                cite.setReason(resultado.getString("cita.motivo"));
+
+                patient.setName(resultado.getString("nombre_paciente"));
+                medic.setName(resultado.getString("nombre_medico"));
+
+                cite.setPatient(patient);
+                cite.setMedic(medic);
 
                 citeList.add(cite);
             }
@@ -247,9 +257,6 @@ public class CitaModel implements CRUD
                 cite.setCite_date(resultado.getDate("fecha_cita"));
                 cite.setCite_hour(resultado.getTime("hora_cita"));
                 cite.setReason(resultado.getString("motivo"));
-                cite.setPatient(resultado.getString("nombre_paciente"));
-                cite.setMedic(resultado.getString("nombre_medico"));
-
             }
         }
         catch (Exception e)

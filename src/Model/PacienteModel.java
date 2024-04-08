@@ -15,7 +15,8 @@ import java.util.List;
 public class PacienteModel implements CRUD
 {
     @Override
-    public Object create(Object object) {
+    public Object create(Object object)
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -53,7 +54,8 @@ public class PacienteModel implements CRUD
     }
 
     @Override
-    public List<Object> list() {
+    public List<Object> list()
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -96,7 +98,7 @@ public class PacienteModel implements CRUD
     {
         Paciente patient = (Paciente) object;
 
-        Connection  conexion = ConfigDB.openConnection();
+        Connection conexion = ConfigDB.openConnection();
 
         boolean isDeleted = false;
 
@@ -131,8 +133,8 @@ public class PacienteModel implements CRUD
     }
 
     @Override
-    public boolean update(Object object) {
-
+    public boolean update(Object object)
+    {
         Connection conexion = ConfigDB.openConnection();
 
         boolean isUpdated = false;
@@ -143,7 +145,7 @@ public class PacienteModel implements CRUD
 
             String sqlQuery = "UPDATE paciente SET nombre = ?, apellidos = ?, fecha_nacimiento = ?, documento_identidad = ? WHERE id_paciente = ?;";
 
-            PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
 
             //Se le pasa posicion y dato al statement
             preparedStatement.setInt(5, patient.getId_paciente());
@@ -151,7 +153,6 @@ public class PacienteModel implements CRUD
             preparedStatement.setString(2, patient.getSurname());
             preparedStatement.setDate(3, patient.getDate_birth());
             preparedStatement.setString(4, patient.getDocument());
-
 
             int resultado = preparedStatement.executeUpdate();
 

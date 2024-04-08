@@ -1,7 +1,10 @@
 package Controller;
 
 import Entity.Cita;
+import Entity.Medico;
+import Entity.Paciente;
 import Model.CitaModel;
+import utils.Utils;
 
 import javax.swing.JOptionPane;
 import java.sql.Date;
@@ -10,6 +13,11 @@ import java.util.List;
 
 public class CitaController 
 {
+    public static CitaModel instanceModelCite()
+    {
+        return new CitaModel();
+    }
+
     //Listar factorizado para cualquier objeto de lista
     public static String listAll(List<Object> objectList)
     {
@@ -25,32 +33,16 @@ public class CitaController
 
     public static void listCites()
     {
-        CitaModel citaModel = new CitaModel();
-
-        JOptionPane.showMessageDialog(null, listAll(citaModel.list()));
-    }
-
-    public static String listAllCites()
-    {
-        CitaModel citaModel = new CitaModel();
-        String listCites = "CITES LIST \n";
-
-        for (Object cite: citaModel.list()){
-
-            Cita citeNew = (Cita) cite;
-            listCites += citeNew.toString() + "\n";
-        }
-
-        return listCites;
+        JOptionPane.showMessageDialog(null, listAll(instanceModelCite().list()));
     }
 
     public static void delete()
     {
         CitaModel citaModel = new CitaModel();
 
-        String citesList = listAllCites();
+        instanceModelCite().list();
 
-        int id = Integer.parseInt(JOptionPane.showInputDialog(citesList + "Input the Cite ID to delete"));
+        int id = Integer.parseInt(JOptionPane.showInputDialog("Input the Cite ID to delete"));
 
         //Buscamos primero si existe
         Cita cite = citaModel.findById(id);
@@ -61,7 +53,7 @@ public class CitaController
         }
         else
         {
-            int confirm = JOptionPane.showConfirmDialog(null,"Are you sure to delete? -- > " + cite.toString2());
+            int confirm = JOptionPane.showConfirmDialog(null,"Are you sure to delete? -- > " + cite.toString());
 
             if (confirm == 1)
             {
@@ -70,7 +62,7 @@ public class CitaController
             else
             {
                 citaModel.delete(cite);
-                JOptionPane.showMessageDialog(null, "Deleted sucessfully! --> " + cite.toString2());
+                JOptionPane.showMessageDialog(null, "Deleted sucessfully! --> " + cite.toString());
             }
         }
     }
@@ -79,9 +71,7 @@ public class CitaController
     {
         CitaModel citaModel = new CitaModel();
 
-        String citesList = listAllCites();
-
-        int idUpdated = Integer.parseInt( JOptionPane.showInputDialog(citesList + "Enter Cite ID to edit"));
+        int idUpdated = Integer.parseInt( JOptionPane.showInputDialog("Enter Cite ID to edit"));
 
         Cita cite = citaModel.findById(idUpdated);
 
@@ -108,27 +98,32 @@ public class CitaController
     }
 
 
-    public static void create(){
-
-        CitaModel citaModel = new CitaModel();
-        Cita cite = new Cita();
+    public static void create()
+    {
+        Object[] patientsList = Utils.listToarray(PacienteController.instancePatientModel().list());
+        Object[] medicsList = Utils.listToarray(MedicoController.instanceMedicModel().list());
 
         String reason = JOptionPane.showInputDialog("Insert cite Reason");
-        Date citeDate = Date.valueOf(JOptionPane.showInputDialog("Insert cite Date"));
-        Time citeHour = Time.valueOf(JOptionPane.showInputDialog("Insert cite Hour"));
-        int id_patient = Integer.parseInt(JOptionPane.showInputDialog("Insert ID Patient"));
-        int id_medic = Integer.parseInt(JOptionPane.showInputDialog("Insert ID Medic"));
+        Date citeDate = Date.valueOf(JOptionPane.showInputDialog("Insert cite Date 'YYYY-MM-DD'"));
+        Time citeHour = Time.valueOf(JOptionPane.showInputDialog("Insert cite Hour 'HH:MM:SS'"));
 
-        cite.setReason(reason);
-        cite.setCite_date(citeDate);
-        cite.setCite_hour(citeHour);
-        cite.setId_patient(id_patient);
-        cite.setId_medic(id_medic);
+        Paciente optionSelectedPatient = (Paciente) JOptionPane.showInputDialog(null,
+                "Select Patient to Add at Cite",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                patientsList,
+                patientsList[0]);
 
-        //Pasamos el objeto a cita
-        cite = (Cita) citaModel.create(cite);
+        Medico optionSelectedMedic = (Medico) JOptionPane.showInputDialog(null,
+                "Select Medic to Add at Cite",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                medicsList,
+                medicsList[0]);
 
-        JOptionPane.showMessageDialog(null, cite.toString());
+        instanceModelCite().create(new Cita(optionSelectedPatient.getId_paciente(), optionSelectedMedic.getId_medico(), citeDate, citeHour, reason, optionSelectedPatient, optionSelectedMedic));
     }
 
     public static void findByDate()
