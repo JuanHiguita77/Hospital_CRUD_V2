@@ -108,13 +108,11 @@ public class MedicoController
 
     public static void findDoctorBySpecialization()
     {
-        MedicoModel medicoModel = new MedicoModel();
-
         String specialityName = JOptionPane.showInputDialog("Type the speciality name to search All doctors");
 
-        String listMedicsSpecialities = "LIST DOCTORS WITH " + specialityName + " FINDED \n";
+        String listMedicsSpecialities = "LIST DOCTORS WITH " + specialityName.toUpperCase() + " FINDED -- > \n";
 
-        for (Object medic: medicoModel.findDoctorBySpecialization(specialityName))
+        for (Object medic: instanceMedicModel().findDoctorBySpecialization(specialityName))
         {
             Medico newMedic = (Medico) medic;
             listMedicsSpecialities += newMedic.toString() + "\n";

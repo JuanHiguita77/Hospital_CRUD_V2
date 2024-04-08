@@ -38,65 +38,61 @@ public class CitaController
 
     public static void delete()
     {
-        CitaModel citaModel = new CitaModel();
+        Object[] citaList =  Utils.listToarray(instanceModelCite().list());
 
-        instanceModelCite().list();
+        Cita optionSelectedPatient = (Cita) JOptionPane.showInputDialog(null,
+                "Select Cite to Delete",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                citaList,
+                citaList[0]);
 
-        int id = Integer.parseInt(JOptionPane.showInputDialog("Input the Cite ID to delete"));
-
-        //Buscamos primero si existe
-        Cita cite = citaModel.findById(id);
-
-        if (cite == null)
-        {
-            JOptionPane.showInputDialog(null,"Unknown Cite");
-        }
-        else
-        {
-            int confirm = JOptionPane.showConfirmDialog(null,"Are you sure to delete? -- > " + cite.toString());
-
-            if (confirm == 1)
-            {
-                JOptionPane.showMessageDialog(null,"Stopped!");
-            }
-            else
-            {
-                citaModel.delete(cite);
-                JOptionPane.showMessageDialog(null, "Deleted sucessfully! --> " + cite.toString());
-            }
-        }
+        instanceModelCite().delete(optionSelectedPatient);
     }
 
     public static void update()
     {
-        CitaModel citaModel = new CitaModel();
+        Object[] patientsList = Utils.listToarray(PacienteController.instancePatientModel().list());
+        Object[] medicsList = Utils.listToarray(MedicoController.instanceMedicModel().list());
+        Object[] citeList = Utils.listToarray(CitaController.instanceModelCite().list());
 
-        int idUpdated = Integer.parseInt( JOptionPane.showInputDialog("Enter Cite ID to edit"));
+        Cita citeSelected = (Cita) JOptionPane.showInputDialog(null,
+                "Select a Cite to Update",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                citeList,
+                citeList[0]);
 
-        Cita cite = citaModel.findById(idUpdated);
+        citeSelected.setPatient((Paciente) JOptionPane.showInputDialog(null,
+                "Select Patient to Change at Cite",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                patientsList,
+                patientsList[0]));
 
-        if (cite == null)
-        {
-            JOptionPane.showMessageDialog(null, "Unknown Cite");
-        }
-        else
-        {
-            int fk_id_patient = Integer.parseInt( JOptionPane.showInputDialog("Input the ID Patient or leave default", cite.getId_patient()));
-            int fk_id_medic  = Integer.parseInt( JOptionPane.showInputDialog("Input the ID Medic or leave default", cite.getId_medic()));
-            Date date_cite = Date.valueOf( JOptionPane.showInputDialog("Input the Dace´s cite ID or leave default", cite.getCite_date ()));
-            Time hour_cite = Time.valueOf( JOptionPane.showInputDialog("Input the Hour´s cite ID or leave default", cite.getCite_hour()));
-            String reason = JOptionPane.showInputDialog("Input the Reason´s cite or leave default", cite.getReason());
+        citeSelected.setMedic((Medico) JOptionPane.showInputDialog(null,
+                "Select Medic to Change at Cite",
+                "",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                medicsList,
+                medicsList[0]));
 
-            cite.setId_patient(fk_id_patient);
-            cite.setId_medic(fk_id_medic);
-            cite.setCite_date(date_cite);
-            cite.setCite_hour(hour_cite);
-            cite.setReason(reason);
+        citeSelected.setId_cite(citeSelected.getId_cite());
 
-            citaModel.update(cite);
-        }
+        citeSelected.setId_patient(citeSelected.getPatient().getId_paciente());
+        citeSelected.setId_medic(citeSelected.getMedic().getId_medico());
+
+        citeSelected.setCite_date(Date.valueOf( JOptionPane.showInputDialog("Input the Date´s cite 'YYYY-MM-DD' or leave default", citeSelected.getCite_date ())));
+        citeSelected.setCite_hour(Time.valueOf( JOptionPane.showInputDialog("Input the Hour´s cite 'HH:MM:SS' or leave default", citeSelected.getCite_hour())));
+
+        citeSelected.setReason(JOptionPane.showInputDialog("Input the Reason´s cite or leave default", citeSelected.getReason()));
+
+        instanceModelCite().update(citeSelected);
     }
-
 
     public static void create()
     {
@@ -128,17 +124,16 @@ public class CitaController
 
     public static void findByDate()
     {
-        CitaModel citeModel = new CitaModel();
         Cita cite = new Cita();
 
         Date citeDate = Date.valueOf( JOptionPane.showInputDialog("Input the cite´s date to search"));
 
-        Cita citeRecived = citeModel.findByDate(citeDate);
+        Cita citeRecived = instanceModelCite().findByDate(citeDate);
 
         if (citeRecived == null) {
             JOptionPane.showMessageDialog(null, "Cite not Found");
-        } 
-        else 
+        }
+        else
         {
             cite.setId_cite(citeRecived.getId_cite());
             cite.setId_patient(citeRecived.getId_patient());

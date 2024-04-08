@@ -81,17 +81,20 @@ public class PacienteController
         instancePatientModel().create(new Paciente(name, surname, dateBirth, document));
     }
 
-    public static void findByDocument() {
-        PacienteModel patientModel = new PacienteModel();
+    public static void findByDocument()
+    {
         Paciente patient = new Paciente();
 
         String patient_document = JOptionPane.showInputDialog("Input the patient Document to search");
 
-        Paciente patientReceived = patientModel.findByDocument(patient_document);
+        Paciente patientReceived = instancePatientModel().findByDocument(patient_document);
 
-        if (patientReceived == null) {
-            JOptionPane.showMessageDialog(null, "Document´s patient not Found");
-        } else {
+        if (patientReceived == null)
+        {
+            JOptionPane.showMessageDialog(null, "Document´s Patient not Found");
+        }
+        else
+        {
             patient.setId_paciente(patientReceived.getId_paciente());
             patient.setName(patientReceived.getName());
             patient.setSurname(patientReceived.getSurname());

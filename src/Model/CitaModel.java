@@ -124,12 +124,12 @@ public class CitaModel implements CRUD
             if (resultadoFilasAfectadas > 0)
             {
                 isDeleted = true;
+                JOptionPane.showMessageDialog(null, "Deleted Success!");
             }
             else
             {
                 JOptionPane.showMessageDialog(null, "Dont deleted x.x");
             }
-
         }
         catch (SQLException e)
         {
@@ -142,7 +142,8 @@ public class CitaModel implements CRUD
     }
 
     @Override
-    public boolean update(Object object) {
+    public boolean update(Object object)
+    {
 
         Connection conexion = ConfigDB.openConnection();
 
@@ -234,10 +235,12 @@ public class CitaModel implements CRUD
 
         //Global
         Cita cite = null;
+        Medico medic = null;
+        Paciente patient = null;
 
         try
         {
-            String sqlQuery = "SELECT *, paciente.nombre AS nombre_paciente, medico.nombre AS nombre_medico FROM cita JOIN paciente ON cita.fk_id_paciente = paciente.id_paciente JOIN medico ON cita.fk_id_medico = medico.id_medico WHERE fecha_cita = ?;";
+            String sqlQuery = "SELECT * FROM cita JOIN paciente ON cita.fk_id_paciente = paciente.id_paciente JOIN medico ON cita.fk_id_medico = medico.id_medico WHERE fecha_cita = ?;";
 
             PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
 
@@ -250,13 +253,21 @@ public class CitaModel implements CRUD
             if(resultado.next())
             {
                 cite = new Cita();
+                patient = new Paciente();
+                medic = new Medico();
 
-                cite.setId_cite(resultado.getInt("id_cita"));
-                cite.setId_patient(resultado.getInt("fk_id_paciente"));
-                cite.setId_medic(resultado.getInt("fk_id_medico"));
-                cite.setCite_date(resultado.getDate("fecha_cita"));
-                cite.setCite_hour(resultado.getTime("hora_cita"));
-                cite.setReason(resultado.getString("motivo"));
+                cite.setId_cite(resultado.getInt("cita.id_cita"));
+                cite.setId_patient(resultado.getInt("cita.fk_id_paciente"));
+                cite.setId_medic(resultado.getInt("cita.fk_id_medico"));
+                cite.setCite_date(resultado.getDate("cita.fecha_cita"));
+                cite.setCite_hour(resultado.getTime("cita.hora_cita"));
+                cite.setReason(resultado.getString("cita.motivo"));
+
+                patient.setName(resultado.getString("paciente.nombre"));
+                medic.setName(resultado.getString("medico.nombre"));
+
+                cite.setPatient(patient);
+                cite.setMedic(medic);
             }
         }
         catch (Exception e)

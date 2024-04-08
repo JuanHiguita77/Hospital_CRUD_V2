@@ -178,7 +178,7 @@ public class MedicoModel implements CRUD
         return isUpdated;
     }
 
-    public Medico findById(int id_medic)
+   /* public Medico findById(int id_medic)
     {
         Connection conexion = ConfigDB.openConnection();
 
@@ -216,7 +216,7 @@ public class MedicoModel implements CRUD
         ConfigDB.closeConnection();
 
         return medic;
-    }
+    }*/
 
     public List<Object> findDoctorBySpecialization(String speciality)
     {
@@ -226,10 +226,11 @@ public class MedicoModel implements CRUD
 
         //Global
         Medico medic = null;
+        Especialidad specialityObject = null;
 
         try
         {
-                String sqlQuery = "SELECT *, especialidad.nombre AS especialidad FROM medico JOIN especialidad ON medico.fk_id_especialidad = especialidad.id_especialidad WHERE especialidad.nombre LIKE ?;";
+                String sqlQuery = "SELECT *, especialidad.nombre FROM medico JOIN especialidad ON medico.fk_id_especialidad = especialidad.id_especialidad WHERE especialidad.nombre LIKE ?;";
 
                 PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
 
@@ -239,15 +240,18 @@ public class MedicoModel implements CRUD
                 ResultSet resultado = preparedStatement.executeQuery();
 
                 //Asignamos los datos encontrados
-                if(resultado.next())
+                while(resultado.next())
                 {
                     medic = new Medico();
+                    specialityObject = new Especialidad();
 
                     medic.setId_medico(resultado.getInt("id_medico"));
                     medic.setName(resultado.getString("nombre"));
                     medic.setSurname(resultado.getString("apellidos"));
-                   // medic.setSpeciality(resultado.getString("especialidad"));
                     medic.setFk_id_especialidad(resultado.getInt("fk_id_especialidad"));
+
+                    specialityObject.setName(resultado.getString("especialidad.nombre"));
+                    medic.setSpeciality(specialityObject);
 
                     listSpecilitiesDoctors.add(medic);
                 }

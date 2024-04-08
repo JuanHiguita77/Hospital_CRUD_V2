@@ -217,7 +217,7 @@ public class PacienteModel implements CRUD
         return patient;
     }
 
-    public Paciente findById(int id_patient)
+   /* public Paciente findById(int id_patient)
     {
         Connection conexion = ConfigDB.openConnection();
 
@@ -256,5 +256,5 @@ public class PacienteModel implements CRUD
         ConfigDB.closeConnection();
 
         return patient;
-    }
+    }*/
 }
