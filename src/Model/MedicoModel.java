@@ -119,6 +119,7 @@ public class MedicoModel implements CRUD
             }
 
             JOptionPane.showMessageDialog(null, "Succesfull Delete");
+
         }
         catch (SQLException e)
         {
